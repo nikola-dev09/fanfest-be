@@ -15,14 +15,14 @@ http://localhost:3000/api
 
 
 ### Signup
-#### auth/signup
+#### http://localhost:3000/api/auth/signup
 
 ### Login
-#### auth/login
+#### http://localhost:3000/api/auth/login
 
 ### Questions
-#### /questions
+#### http://localhost:3000/api/questions
 
 ### Socket
-#### /
+#### http://localhost:3000
 
