@@ -26,7 +26,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', route);
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:5173'
+  }
+});
 io.use(socketAuthMiddleware);
 
 matchHandler(io);
