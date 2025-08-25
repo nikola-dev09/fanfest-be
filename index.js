@@ -35,5 +35,5 @@ io.use(socketAuthMiddleware);
 
 matchHandler(io);
 
-const PORT = 3000;
+const PORT = 8000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
