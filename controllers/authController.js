@@ -4,6 +4,8 @@ const signupUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    console.log(req.body);
+
     if (!username || !password) {
       return res.status(400).json({
         success: false,
@@ -32,6 +34,9 @@ const signupUser = async (req, res) => {
 const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+
+    console.log(req.body);
+    
     if (!username || !password) {
       return res.status(400).json({
         success: false,
