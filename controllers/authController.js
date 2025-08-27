@@ -5,7 +5,7 @@ const signupUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message:
           'Malformed request. Make sure username and password are present in the body'
@@ -14,7 +14,7 @@ const signupUser = async (req, res) => {
 
     let user = await User.findOne({ username: username });
     if (user) {
-      return res.status(400).send("User already existed");
+      return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
     user = new User({
@@ -23,9 +23,9 @@ const signupUser = async (req, res) => {
     });
 
     await user.save();
-    res.status(201).json({ success: true, message: 'Signed up successfully' });
+    return res.status(201).json({ success: true, message: 'Signed up successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -33,7 +33,7 @@ const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message:
           'Malformed request. Make sure username and password are present in the body'
@@ -41,23 +41,18 @@ const loginUser = async (req, res, next) => {
     }
     const user = await User.findOne({ username });
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, message: 'User not found' });
+      return res.status(401).json({ success: false, message: 'User not found' });
     }
 
-    if (user.isPasswordValid(password)) {
-      const token = user.generateAuthToken();
-      res
-      .status(200)
-      .json({ success: true, message: 'Logged in successfully', data: token });
-    } else {
-      return res.status(401).send("Invalid login credential");
+    if (!user.isPasswordValid(password)) {
+      return res.status(401).json({ success: false, message: 'Invalid login credential' });
     }
+
+    const token = user.generateAuthToken();
+    return res.status(200).json({ success: true, message: 'Logged in successfully', data: token });
   } catch (error) {
     console.error('Login failed:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-    next(error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
